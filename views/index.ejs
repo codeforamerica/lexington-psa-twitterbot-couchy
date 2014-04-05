@@ -3,7 +3,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
-  <title>UK Couchie!</title>
+  <title>Save Couchy!</title>
   <style>
     .container {
       margin: 0 auto;
@@ -18,7 +18,7 @@
   <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
   <script>
     $(function() {
-      var interval = 1000;
+      var interval = 5000;
 
       function updateTweets() {
         $.get('/tweets', function(tweets) {
@@ -29,7 +29,8 @@
       function displayTweets(tweets) {
         tweetHtml = '';
         tweets.forEach(function(tweet) {
-          tweetHtml += '<li><img src="' + tweet.user.profile_image_url + '" xheight="100" xwidth="100">' + tweet.text + '</li>';
+          // tweetHtml += '<li><img src="' + tweet.user.profile_image_url + '" xheight="100" xwidth="100">' + tweet.text + '</li>';
+          tweetHtml += '<li><blockquote class="twitter-tweet" width="600">' + tweet.embedded.html + '</blockquote></li>';
         });
         $("ul.tweets").html(tweetHtml);
       };
