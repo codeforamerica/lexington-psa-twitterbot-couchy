@@ -13,7 +13,7 @@ var T = new Twit({
 
 var latestTweets = [];
 
-var stream = T.stream('statuses/filter', {track: '@savecouchy'})
+var stream = T.stream('statuses/filter', {track: 'bbn'})
 //
 // var embeddedResponse = {
 //   "type": "rich",
@@ -34,7 +34,7 @@ var embeddedResponse = {"cache_age":"3153600000","url":"https:\/\/twitter.com\/J
 stream.on('tweet', handleTweet);
 
 function handleTweet(tweet) {
-  tweet.embedded = embeddedResponse;
+  // tweet.embedded = embeddedResponse;
 
   if (! tweet.retweeted_status && ! tweet.in_reply_to_status_id) {
     handleNewThread(tweet);
