@@ -5,6 +5,8 @@ var app = express();
 app.set('view engine', 'ejs');
 app.use("/public", express.static(__dirname + '/public'));
 
+var redis = require('redis-url').connect(process.env.REDISTOGO_URL);
+
 var T = new Twit({
     consumer_key:         process.env.CONSUMER_KEY
   , consumer_secret:      process.env.CONSUMER_SECRET
@@ -12,7 +14,6 @@ var T = new Twit({
   , access_token_secret:  process.env.ACCESS_TOKEN_SECRET
 });
 
-var latestTweets = [];
 var latestTweet;
 
 // var stream = T.stream('statuses/filter', {track: '@savecouchy'})
@@ -23,15 +24,12 @@ var embeddedResponse = {"cache_age":"3153600000","url":"https:\/\/twitter.com\/J
 // stream.on('tweet', handleTweet);
 
 function handleTweet(tweet) {
-  tweet.embedded = embeddedResponse;
-
   if (! tweet.retweeted_status && ! tweet.in_reply_to_status_id) {
     handleNewThread(tweet);
   } else {
     console.log('is retweet or reply');
   }
-  latestTweets.push(tweet);
-  console.log(tweet);
+  console.log(tweet.user.screen_name);
   // https.get('https://api.twitter.com/1/statuses/oembed.json?id=' + tweet.id, function(res) {
   //   // console.log('res: ' + JSON.stringify(Object.keys(res)));
   //   res.on('data', function (chunk) {
@@ -42,13 +40,27 @@ function handleTweet(tweet) {
 
 function handleNewThread(tweet) {
   console.log('omg a new thread!!');
-  // if user is new to me:
+
+  redis.get(tweet.user.screen_name, function(err, user) {
+    if (!user) {
+      handleNewUser(tweet)
+    } else {
+      console.log('NOT a new new user ' + tweet.user.screen_name);
+    }
+  });
+}
+
+function handleNewUser(tweet) {
+  console.log('new user! ' + tweet.user.screen_name);
   latestTweet = tweet;
+  tweet.embedded = embeddedResponse;
+  redis.set(tweet.user.screen_name, JSON.stringify(tweet));
   // replyTo(tweet);
 }
 
 function replyTo(tweet) {
-  var update = '@' + tweet.user.screen_name + ' is my new best bud. Thank you for saving me from the flaaaaames!';
+  var handle = tweet.user.screen_name;
+  var update = '@' + handle + ' is my new best bud. Here you are saving me from the flaaaaames! http://savecouchy.com/buds/' + handle;
   T.post('statuses/update', {status: update, in_reply_to_status_id: tweet.id}, function(err, reply) {
     console.log('err: ' + err);
     console.log('reply: ' + reply);
@@ -56,11 +68,22 @@ function replyTo(tweet) {
 }
 
 app.get('/', function(req, res) {
-  res.render('index', { latestTweets: latestTweets })
+  res.render('index', { latestTweets: [] })
 });
 
 app.get('/tweets', function(req, res) {
   res.send([latestTweet]);
+});
+
+app.get('/buds/:name', function(req, res) {
+  console.log('name: ' + req.params.name);
+  redis.get(req.params.name, function(err, tweet) {
+    if (tweet) {
+      res.render('bud', { tweet: JSON.parse(tweet) })
+    } else {
+      res.end('could not find user');
+    }
+  });
 });
 
 var port = Number(process.env.PORT || 5000);

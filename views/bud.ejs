@@ -21,8 +21,6 @@
         $('.tweet').html(tweets[0].embedded.html);
         $('.avatar').prop('src', tweet.user.profile_image_url);
       };
-
-      setInterval(updateTweets, interval);
     });
   </script>
   <script>
@@ -41,17 +39,12 @@
     </div>
     <div class="container">
       <div class="avatar-container">
-        <img class="avatar" src="https://pbs.twimg.com/profile_images/821409818/erik_02_square_bigger.jpg">
+        <img class="avatar" src="<%- tweet.user.profile_image_url %>">
       </div>
       <img class="couch" src="/public/BBNGif.gif">
     </div>
     <div class="container">
-      <div class="tweet"></div>
-      <!-- <ul class="tweets"> -->
-      <!--   <% latestTweets.forEach(function(tweet) { %> -->
-      <!--     <li>fooo</li> -->
-      <!--   <% }) %> -->
-      <!-- </ul> -->
+      <div class="tweet"><%- tweet.embedded.html %></div>
     </div>
   </body>
 </html>

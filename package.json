@@ -6,7 +6,8 @@
   "dependencies": {
     "twit": "~1.1.12",
     "express": "~3.5.1",
-    "ejs": "~1.0.0"
+    "ejs": "~1.0.0",
+    "redis-url": "~0.2.0"
   },
   "devDependencies": {},
   "scripts": {

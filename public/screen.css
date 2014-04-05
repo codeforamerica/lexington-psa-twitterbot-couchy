@@ -1,0 +1,46 @@
+.container {
+  margin: 0 auto;
+  width: 600px;
+  position: relative;
+  text-align: center;
+}
+.tweet {
+  position: absolute;
+  top: 320;
+  padding-left: 50px;
+  width: 100%;
+}
+
+.couch {
+  top: 0;
+  left: 0;
+  position: absolute;
+}
+.avatar-container {
+  width: 48px;
+}
+.avatar-container img {
+  position: relative;
+  width: 100%;
+}
+.avatar {
+  top: 186;
+  left: 390;
+  position: absolute;
+  max-width: 100%;
+}
+@media (max-width: 800px) {
+  .container {
+    width: 400px;
+  }
+  .couch {
+    width: 300px;
+  }
+  .avatar-container {
+    width: 26;
+  }
+  .avatar {
+    top: 93px;
+    left: 193;
+  }
+}
