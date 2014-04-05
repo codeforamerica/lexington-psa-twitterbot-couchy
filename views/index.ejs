@@ -9,6 +9,11 @@
       margin: 0 auto;
       width: 50%;
     }
+    @media (max-width: 600px) {
+      .container {
+        width: 100%;
+      }
+    }
   </style>
   <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
   <script>
@@ -24,7 +29,7 @@
       function displayTweets(tweets) {
         tweetHtml = '';
         tweets.forEach(function(tweet) {
-          tweetHtml += "<li>" + tweet.text + "</li>";
+          tweetHtml += '<li><img src="' + tweet.user.profile_image_url + '" xheight="100" xwidth="100">' + tweet.text + '</li>';
         });
         $("ul.tweets").html(tweetHtml);
       };

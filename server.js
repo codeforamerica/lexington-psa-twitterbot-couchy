@@ -12,7 +12,7 @@ var T = new Twit({
 
 var latestTweets = [];
 
-var stream = T.stream('statuses/filter', {track: 'xbox'})
+var stream = T.stream('statuses/filter', {track: 'bbn'})
 
 stream.on('tweet', function (tweet) {
   if (latestTweets.length >= 3) {
