@@ -44,7 +44,13 @@
       <img class="couch" src="/public/BBNGif.gif">
     </div>
     <div class="container">
-      <div class="tweet"><%- tweet.embedded.html %></div>
+      <div class="tweet">
+        <h3>From Couchy's best bud:</h3>
+        <%- tweet.text %>
+        <p><a href="https://twitter.com/intent/tweet?in_reply_to=<%- tweet.id %>">Reply</a>
+        <a href="https://twitter.com/intent/retweet?tweet_id=<%- tweet.id %>">Retweet</a>
+        <a href="https://twitter.com/intent/favorite?tweet_id=<%- tweet.id %>">Favorite</a></p>
+      </div>
     </div>
   </body>
 </html>

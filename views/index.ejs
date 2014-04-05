@@ -8,21 +8,20 @@
   <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
   <script>
     $(function() {
-      var interval = 10000;
+      var interval = 1000;
 
-      function updateTweets() {
-        $.get('/tweets', function(tweets) {
-          displayTweets(tweets);
+      function updateTweet() {
+        $.get('/tweet', function(tweet) {
+          displayTweets(tweet);
         });
       }
 
-      function displayTweets(tweets) {
-        var tweet = tweets[0];
-        $('.tweet').html(tweets[0].embedded.html);
+      function displayTweets(tweet) {
+        $('.tweet .text').html(tweet.text);
         $('.avatar').prop('src', tweet.user.profile_image_url);
       };
 
-      setInterval(updateTweets, interval);
+      setInterval(updateTweet, interval);
     });
   </script>
   <script>
@@ -34,10 +33,11 @@
     ga('create', 'UA-47565520-3', 'savecouchy.com');
     ga('send', 'pageview');
   </script>
+  <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
   </head>
   <body>
     <div class="container">
-      <h1>Tweet <a href="https://twitter.com/SaveCouchy">@SaveCouchy</a> to save him from the flaaaames!</h1>
+      <blockquote class="twitter-tweet" align="center" lang="en"><p>Tweet at your buddy <a href="https://twitter.com/SaveCouchy">@SaveCouchy</a> to save me from the flaaaaaames!</p>&mdash; Couchy (@SaveCouchy) <a href="https://twitter.com/SaveCouchy/statuses/452586780017963008">April 5, 2014</a></blockquote>
     </div>
     <div class="container">
       <div class="avatar-container">
@@ -46,12 +46,10 @@
       <img class="couch" src="/public/BBNGif.gif">
     </div>
     <div class="container">
-      <div class="tweet"></div>
-      <!-- <ul class="tweets"> -->
-      <!--   <% latestTweets.forEach(function(tweet) { %> -->
-      <!--     <li>fooo</li> -->
-      <!--   <% }) %> -->
-      <!-- </ul> -->
+      <div class="tweet">
+        <h3>From Couchy's best bud:</h3>
+        <p class="text"></p>
+      </div>
     </div>
   </body>
 </html>

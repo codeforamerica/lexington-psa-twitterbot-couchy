@@ -7,7 +7,7 @@
 .tweet {
   position: absolute;
   top: 320;
-  padding-left: 50px;
+  /* padding-left: 50px; */
   width: 100%;
 }
 

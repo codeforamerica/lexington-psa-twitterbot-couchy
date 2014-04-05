@@ -21,21 +21,15 @@ var stream = T.stream('statuses/filter', {track: 'bbn'})
 
 var embeddedResponse = {"cache_age":"3153600000","url":"https:\/\/twitter.com\/JDaugherty_\/statuses\/452481183213813760","height":null,"provider_url":"https:\/\/twitter.com","provider_name":"Twitter","author_name":"Justin Daugherty","version":"1.0","author_url":"https:\/\/twitter.com\/JDaugherty_","type":"rich","html":"\u003Cblockquote class=\"twitter-tweet\"\u003E\u003Cp\u003EJust ready to leave work that&#39;s all.. \u003Ca href=\"https:\/\/twitter.com\/search?q=%23BBN&amp;src=hash\"\u003E#BBN\u003C\/a\u003E\u003C\/p\u003E&mdash; Justin Daugherty (@JDaugherty_) \u003Ca href=\"https:\/\/twitter.com\/JDaugherty_\/statuses\/452481183213813760\"\u003EApril 5, 2014\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E","width":550};
 
-// stream.on('tweet', handleTweet);
+stream.on('tweet', handleTweet);
 
 function handleTweet(tweet) {
-  if (! tweet.retweeted_status && ! tweet.in_reply_to_status_id) {
+  if (! tweet.retweeted_status) {
     handleNewThread(tweet);
   } else {
-    console.log('is retweet or reply');
+    console.log('is retweet');
   }
   console.log(tweet.user.screen_name);
-  // https.get('https://api.twitter.com/1/statuses/oembed.json?id=' + tweet.id, function(res) {
-  //   // console.log('res: ' + JSON.stringify(Object.keys(res)));
-  //   res.on('data', function (chunk) {
-  //     console.log('BODY: ' + chunk);
-  //   });
-  // });
 }
 
 function handleNewThread(tweet) {
@@ -50,10 +44,32 @@ function handleNewThread(tweet) {
   });
 }
 
+// T.get('statuses/oembed', {id: 452581652863004700}, function(err, reply) {
+//   console.log('err: ' + err);
+//   console.log('reply: ' + reply);
+// });
+
 function handleNewUser(tweet) {
   console.log('new user! ' + tweet.user.screen_name);
+  // var embeddedResponse;
+
+  // T.get('statuses/oembed', {id: tweet.id}, function(err, reply) {
+    // // console.log('res: ' + JSON.stringify(Object.keys(res)));
+    // res.on('data', function (chunk) {
+    //   embeddedResponse += chunk;
+    //   console.log('BODY: ' + tweet.id + chunk);
+    // });
+    // res.on('end', function() {
+      // tweet.embedded = embeddedResponse;
+      // setNewUser(tweet);
+    // });
+  // });
+  tweet.embedded = {html: tweet.text};
+  setNewUser(tweet);
+}
+
+function setNewUser(tweet) {
   latestTweet = tweet;
-  tweet.embedded = embeddedResponse;
   redis.set(tweet.user.screen_name, JSON.stringify(tweet));
   // replyTo(tweet);
 }
@@ -68,18 +84,20 @@ function replyTo(tweet) {
 }
 
 app.get('/', function(req, res) {
-  res.render('index', { latestTweets: [] })
+  res.render('index', { latestTweet: latestTweet })
 });
 
-app.get('/tweets', function(req, res) {
-  res.send([latestTweet]);
+app.get('/tweet', function(req, res) {
+  res.send(latestTweet);
 });
 
 app.get('/buds/:name', function(req, res) {
   console.log('name: ' + req.params.name);
   redis.get(req.params.name, function(err, tweet) {
     if (tweet) {
-      res.render('bud', { tweet: JSON.parse(tweet) })
+      tweet = JSON.parse(tweet)
+      // tweet.id = "452586780017963008";
+      res.render('bud', { tweet: tweet })
     } else {
       res.end('could not find user');
     }
