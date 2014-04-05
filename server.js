@@ -16,10 +16,8 @@ var T = new Twit({
 
 var latestTweet;
 
-// var stream = T.stream('statuses/filter', {track: '@savecouchy'})
-var stream = T.stream('statuses/filter', {track: 'bbn'})
-
-var embeddedResponse = {"cache_age":"3153600000","url":"https:\/\/twitter.com\/JDaugherty_\/statuses\/452481183213813760","height":null,"provider_url":"https:\/\/twitter.com","provider_name":"Twitter","author_name":"Justin Daugherty","version":"1.0","author_url":"https:\/\/twitter.com\/JDaugherty_","type":"rich","html":"\u003Cblockquote class=\"twitter-tweet\"\u003E\u003Cp\u003EJust ready to leave work that&#39;s all.. \u003Ca href=\"https:\/\/twitter.com\/search?q=%23BBN&amp;src=hash\"\u003E#BBN\u003C\/a\u003E\u003C\/p\u003E&mdash; Justin Daugherty (@JDaugherty_) \u003Ca href=\"https:\/\/twitter.com\/JDaugherty_\/statuses\/452481183213813760\"\u003EApril 5, 2014\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E","width":550};
+var stream = T.stream('statuses/filter', {track: '@savecouchy'})
+// var stream = T.stream('statuses/filter', {track: 'bbn'})
 
 stream.on('tweet', handleTweet);
 
@@ -44,11 +42,6 @@ function handleNewThread(tweet) {
   });
 }
 
-// T.get('statuses/oembed', {id: 452581652863004700}, function(err, reply) {
-//   console.log('err: ' + err);
-//   console.log('reply: ' + reply);
-// });
-
 function handleNewUser(tweet) {
   console.log('new user! ' + tweet.user.screen_name);
   // var embeddedResponse;
@@ -71,7 +64,7 @@ function handleNewUser(tweet) {
 function setNewUser(tweet) {
   latestTweet = tweet;
   redis.set(tweet.user.screen_name, JSON.stringify(tweet));
-  // replyTo(tweet);
+  replyTo(tweet);
 }
 
 function replyTo(tweet) {
