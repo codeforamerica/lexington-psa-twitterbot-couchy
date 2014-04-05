@@ -14,7 +14,6 @@ var T = new Twit({
 var latestTweets = [];
 
 var stream = T.stream('statuses/filter', {track: '@savecouchy'})
-var embeddedResponse;
 //
 // var embeddedResponse = {
 //   "type": "rich",
