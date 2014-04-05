@@ -1,5 +1,7 @@
-var Twit = require('twit'),
-  http = require('http');
+var Twit = require('twit');
+var express = require("express");
+var app = express();
+app.set('view engine', 'ejs');
 
 var T = new Twit({
     consumer_key:         process.env.CONSUMER_KEY
@@ -8,28 +10,27 @@ var T = new Twit({
   , access_token_secret:  process.env.ACCESS_TOKEN_SECRET
 });
 
-var latestTweet;
+var latestTweets = [];
 
 var stream = T.stream('statuses/filter', {track: 'xbox'})
 
 stream.on('tweet', function (tweet) {
-  latestTweet = tweet;
+  if (latestTweets.length >= 3) {
+    latestTweets.shift()
+  }
+  latestTweets.push(tweet);
   console.log(tweet);
 })
 
-var server = http.createServer(function (request, response) {
-  response.writeHead(200, {"Content-Type": "text/plain"});
-  response.write("Hello World\n");
-  if (latestTweet) {
-    response.write(JSON.stringify(latestTweet));
-  }
-  response.end();
+app.get('/', function(req, res) {
+  res.render('index', { latestTweets: latestTweets })
 });
 
-// Listen on port 8000, IP defaults to 127.0.0.1
-var port = Number(process.env.PORT || 8000);
-server.listen(port);
+app.get('/tweets', function(req, res) {
+  res.send(latestTweets);
+});
 
-// Put a friendly message on the terminal
-console.log("Server running at http://127.0.0.1:8000/");
-
+var port = Number(process.env.PORT || 5000);
+app.listen(port, function() {
+  console.log("Listening on " + port);
+});

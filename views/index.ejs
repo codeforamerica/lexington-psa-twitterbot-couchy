@@ -1,0 +1,45 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>UK Couchie!</title>
+  <style>
+    .container {
+      margin: 0 auto;
+      width: 50%;
+    }
+  </style>
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script>
+    $(function() {
+      var interval = 1000;
+
+      function updateTweets() {
+        $.get('/tweets', function(tweets) {
+          displayTweets(tweets);
+        });
+      }
+
+      function displayTweets(tweets) {
+        tweetHtml = '';
+        tweets.forEach(function(tweet) {
+          tweetHtml += "<li>" + tweet.text + "</li>";
+        });
+        $("ul.tweets").html(tweetHtml);
+      };
+
+      setInterval(updateTweets, interval);
+    });
+  </script>
+  </head>
+  <body>
+    <div class="container">
+      <ul class="tweets">
+        <% latestTweets.forEach(function(tweet) { %>
+          <li>fooo</li>
+        <% }) %>
+      </ul>
+    </div>
+  </body>
+</html>
