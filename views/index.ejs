@@ -8,17 +8,50 @@
     .container {
       margin: 0 auto;
       width: 50%;
+      position: relative;
     }
-    @media (max-width: 600px) {
+    .tweet {
+      position: absolute;
+      top: 400;
+    }
+    .couch {
+      top: 0;
+      left: 0;
+      position: absolute;
+    }
+    .avatar-container {
+      width: 48px;
+    }
+    .avatar-container img {
+      position: relative;
+      width: 100%;
+    }
+    .avatar {
+      top: 186;
+      left: 422;
+      position: absolute;
+      max-width: 100%;
+    }
+    @media (max-width: 800px) {
       .container {
         width: 100%;
+      }
+      .couch {
+        width: 300px;
+      }
+      .avatar-container {
+        width: 34px;
+      }
+      .avatar {
+        top: 87px;
+        left: 205px;
       }
     }
   </style>
   <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
   <script>
     $(function() {
-      var interval = 5000;
+      var interval = 10000;
 
       function updateTweets() {
         $.get('/tweets', function(tweets) {
@@ -27,15 +60,18 @@
       }
 
       function displayTweets(tweets) {
-        tweetHtml = '';
-        tweets.forEach(function(tweet) {
-          // tweetHtml += '<li><img src="' + tweet.user.profile_image_url + '" xheight="100" xwidth="100">' + tweet.text + '</li>';
-          tweetHtml += '<li><blockquote class="twitter-tweet" width="600">' + tweet.embedded.html + '</blockquote></li>';
-        });
-        $("ul.tweets").html(tweetHtml);
+        var tweet = tweets[0];
+        $('.tweet').html(tweets[0].embedded.html);
+        $('.avatar').prop('src', tweet.user.profile_image_url);
+        // tweetHtml = '';
+        // tweets.forEach(function(tweet) {
+        //   // tweetHtml += '<li><img src="' + tweet.user.profile_image_url + '" xheight="100" xwidth="100">' + tweet.text + '</li>';
+        //   tweetHtml += '<li><blockquote class="twitter-tweet" width="600">' + tweet.embedded.html + '</blockquote></li>';
+        // });
+        // $("ul.tweets").html(tweetHtml);
       };
 
-      // setInterval(updateTweets, interval);
+      setInterval(updateTweets, interval);
     });
   </script>
   <script>
@@ -51,11 +87,18 @@
   </head>
   <body>
     <div class="container">
-      <ul class="tweets">
-        <% latestTweets.forEach(function(tweet) { %>
-          <li>fooo</li>
-        <% }) %>
-      </ul>
+      <div class="avatar-container">
+        <img class="avatar" src="https://pbs.twimg.com/profile_images/821409818/erik_02_square_bigger.jpg">
+      </div>
+      <img class="couch" src="/public/BBNGif.gif">
+    </div>
+    <div class="container">
+      <div class="tweet"></div>
+      <!-- <ul class="tweets"> -->
+      <!--   <% latestTweets.forEach(function(tweet) { %> -->
+      <!--     <li>fooo</li> -->
+      <!--   <% }) %> -->
+      <!-- </ul> -->
     </div>
   </body>
 </html>
