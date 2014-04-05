@@ -1,6 +1,6 @@
 var Twit = require('twit');
 var express = require("express");
-// var https = require('https');
+var https = require('https');
 var app = express();
 app.set('view engine', 'ejs');
 
@@ -11,14 +11,9 @@ var T = new Twit({
   , access_token_secret:  process.env.ACCESS_TOKEN_SECRET
 });
 
-T.post('statuses/update', {status: 'hello from heroku! ' + Math.random(10000)}, function(err, reply) {
-  console.log('err: ' + err);
-  console.log('reply: ' + reply);
-});
-
 var latestTweets = [];
 
-// var stream = T.stream('statuses/filter', {track: 'bbn'})
+var stream = T.stream('statuses/filter', {track: '@savecouchy'})
 //
 // var embeddedResponse = {
 //   "type": "rich",
@@ -36,10 +31,9 @@ var latestTweets = [];
 
 var embeddedResponse = {"cache_age":"3153600000","url":"https:\/\/twitter.com\/JDaugherty_\/statuses\/452481183213813760","height":null,"provider_url":"https:\/\/twitter.com","provider_name":"Twitter","author_name":"Justin Daugherty","version":"1.0","author_url":"https:\/\/twitter.com\/JDaugherty_","type":"rich","html":"\u003Cblockquote class=\"twitter-tweet\"\u003E\u003Cp\u003EJust ready to leave work that&#39;s all.. \u003Ca href=\"https:\/\/twitter.com\/search?q=%23BBN&amp;src=hash\"\u003E#BBN\u003C\/a\u003E\u003C\/p\u003E&mdash; Justin Daugherty (@JDaugherty_) \u003Ca href=\"https:\/\/twitter.com\/JDaugherty_\/statuses\/452481183213813760\"\u003EApril 5, 2014\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E","width":550};
 
-// stream.on('tweet', handleTweet);
+stream.on('tweet', handleTweet);
 
 function handleTweet(tweet) {
-  console.log('handle tweet called');
   // tweet.embedded = embeddedResponse;
 
   if (! tweet.retweeted_status && ! tweet.in_reply_to_status_id) {
@@ -60,7 +54,7 @@ function handleTweet(tweet) {
 function handleNewThread(tweet) {
   console.log('omg a new thread!!');
   // if user is new to me:
-  // replyTo(tweet);
+  replyTo(tweet);
 }
 
 function replyTo(tweet) {
