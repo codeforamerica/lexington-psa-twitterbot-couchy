@@ -46,7 +46,7 @@
     </div>
     <div class="container">
       <div class="tweet">
-        <h3>From Couchy's best bud:</h3>
+        <h3>From Couchy's best bud <a href="https://twitter.com/<%- tweet.user.screen_name %>/statuses/<%- tweet.id %>">@<%- tweet.user.screen_name %></a>:</h3>
         <%- tweet.text %>
         <p><a href="https://twitter.com/intent/tweet?in_reply_to=<%- tweet.id %>">Reply</a>
         <a href="https://twitter.com/intent/retweet?tweet_id=<%- tweet.id %>">Retweet</a>

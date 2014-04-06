@@ -12,16 +12,20 @@
 
       function updateTweet() {
         $.get('/tweet', function(tweet) {
-          displayTweets(tweet);
+          displayTweet(tweet);
         });
       }
 
-      function displayTweets(tweet) {
+      function displayTweet(tweet) {
         $('.tweet .text').html(tweet.text);
+        $('.tweet .twitter-handle').html('<a href="https://twitter.com/' + tweet.user.screen_name + '/statuses/' + tweet.id + '">@' + tweet.user.screen_name + '</a>');
         $('.avatar').prop('src', tweet.user.profile_image_url);
       };
 
       setInterval(updateTweet, interval);
+
+      var seedTweet = <%- JSON.stringify(latestTweet) %>;
+      displayTweet(seedTweet);
     });
   </script>
   <script>
@@ -47,7 +51,7 @@
     </div>
     <div class="container">
       <div class="tweet">
-        <h3>From Couchy's best bud:</h3>
+        <h3>From Couchy's best bud <span class="twitter-handle"></span>:</h3>
         <p class="text"></p>
       </div>
     </div>
