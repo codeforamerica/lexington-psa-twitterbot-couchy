@@ -51,7 +51,7 @@ function handleNewUser(tweet) {
 
 function setNewUser(tweet) {
   redis.set(tweet.user.screen_name, JSON.stringify(tweet));
-  replyTo(tweet);
+  // replyTo(tweet);
 }
 
 function replyTo(tweet) {
