@@ -18,7 +18,7 @@
 
       function displayTweet(tweet) {
         $('.tweet .text').html(tweet.text);
-        $('.tweet .twitter-handle').html('<a href="https://twitter.com/' + tweet.user.screen_name + '/statuses/' + tweet.id + '">@' + tweet.user.screen_name + '</a>');
+        $('.tweet .twitter-handle').html('<a href="https://twitter.com/' + tweet.user.screen_name + '">@' + tweet.user.screen_name + '</a>');
         $('.avatar').prop('src', tweet.user.profile_image_url);
       };
 
