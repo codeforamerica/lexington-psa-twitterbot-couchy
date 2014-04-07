@@ -6,11 +6,13 @@
 }
 .tweet {
   position: absolute;
-  top: 320;
+  top: 238px;
   /* padding-left: 50px; */
   width: 100%;
 }
-
+.dance-box {
+  top: -90px;
+}
 .couch {
   top: 0;
   left: 0;
@@ -29,9 +31,15 @@
   position: absolute;
   max-width: 100%;
 }
+.twitter-stream {
+  margin-top: 341px;
+}
 @media (max-width: 800px) {
   .container {
     width: 400px;
+  }
+  .dance-box {
+    top: -20px;
   }
   .couch {
     width: 300px;
@@ -45,5 +53,8 @@
   }
   .tweet {
     top: 185px;
+  }
+  .twitter-stream {
+    margin-top: 350px;
   }
 }

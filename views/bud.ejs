@@ -35,11 +35,10 @@
   <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
   </head>
   <body>
-    <div class="container">
-      <a href="/">home</a>
-      <blockquote class="twitter-tweet" align="center" lang="en"><p>Tweet at your buddy <a href="https://twitter.com/SaveCouchy">@SaveCouchy</a> to save me from the flaaaaaames!</p>&mdash; Couchy (@SaveCouchy) <a href="https://twitter.com/SaveCouchy/statuses/452586780017963008">April 5, 2014</a></blockquote>
+    <div class="container" style="z-index:10">
+      <a href="/" >home</a>
     </div>
-    <div class="container">
+    <div class="container dance-box">
       <div class="avatar-container">
         <img class="avatar" src="<%- tweet.user.profile_image_url %>">
       </div>
@@ -49,10 +48,16 @@
       <div class="tweet">
         <h3>From Couchy's best bud <a href="https://twitter.com/<%- tweet.user.screen_name %>/statuses/<%- tweet.id %>">@<%- tweet.user.screen_name %></a>:</h3>
         <%- tweet.text %>
-        <p><a href="https://twitter.com/intent/tweet?in_reply_to=<%- tweet.id %>">Reply</a>
-        <a href="https://twitter.com/intent/retweet?tweet_id=<%- tweet.id %>">Retweet</a>
-        <a href="https://twitter.com/intent/favorite?tweet_id=<%- tweet.id %>">Favorite</a></p>
+        <a href="https://twitter.com/share?text=<%- encodeURIComponent('Watch me save Couchy from the flaaaaames! @CouchyLives ' + requestUrl) %>&hashtags=BBN" class="twitter-share-button" data-lang="en">Tweet</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+        <!-- <p><a href="https://twitter.com/intent/tweet?in_reply_to=<%- tweet.id %>">Reply</a> -->
+        <!-- <a href="https://twitter.com/intent/retweet?tweet_id=<%- tweet.id %>">Retweet</a> -->
+        <!-- <a href="https://twitter.com/intent/favorite?tweet_id=<%- tweet.id %>">Favorite</a></p> -->
       </div>
+    </div>
+    <div class="container twitter-stream">
+      <a class="twitter-timeline" href="https://twitter.com/search?q=couchylives+OR+savecouchy" data-widget-id="453277467235459072">Tweets about "couchylives OR savecouchy"</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
     </div>
   </body>
 </html>

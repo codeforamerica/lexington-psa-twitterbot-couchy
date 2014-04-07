@@ -8,7 +8,7 @@
   <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
   <script>
     $(function() {
-      var interval = 5000;
+      var interval = 2500;
 
       function updateTweet() {
         $.get('/tweet', function(tweet) {
@@ -17,8 +17,8 @@
       }
 
       function displayTweet(tweet) {
-        $('.tweet .text').html(tweet.text);
-        $('.tweet .twitter-handle').html('<a href="https://twitter.com/' + tweet.user.screen_name + '">@' + tweet.user.screen_name + '</a>');
+        $('.tweet .text').html('"' + tweet.text + '"');
+        $('.tweet .twitter-handle').html('<a href="/buds/' + tweet.user.screen_name + '">@' + tweet.user.screen_name + '</a>');
         $('.avatar').prop('src', tweet.user.profile_image_url);
       };
 
@@ -40,10 +40,7 @@
   <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
   </head>
   <body>
-    <div class="container">
-      <blockquote class="twitter-tweet" align="center" lang="en"><p>Tweet at your buddy <a href="https://twitter.com/SaveCouchy">@SaveCouchy</a> to save me from the flaaaaaames!</p>&mdash; Couchy (@SaveCouchy) <a href="https://twitter.com/SaveCouchy/statuses/452586780017963008">April 5, 2014</a></blockquote>
-    </div>
-    <div class="container">
+    <div class="container dance-box">
       <div class="avatar-container">
         <img class="avatar" src="https://pbs.twimg.com/profile_images/821409818/erik_02_square_bigger.jpg">
       </div>
@@ -51,9 +48,18 @@
     </div>
     <div class="container">
       <div class="tweet">
-        <h3>From Couchy's best bud <span class="twitter-handle"></span>:</h3>
         <p class="text"></p>
+        <p>-- <span class="twitter-handle"></span></p>
       </div>
+    </div>
+    <div class="container twitter-stream">
+      <h3>Tweet @CouchyLives to save Couchy from the flaaaames!</h3>
+      <a href="https://twitter.com/share?text=I%20saved%20Couchy%20from%20the%20flaaaaaames!%20%40SaveCouchy!&hashtags=BBN" class="twitter-share-button" data-lang="en">Tweet</a>
+      <br>
+      <br>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+      <a class="twitter-timeline" href="https://twitter.com/search?q=couchylives+OR+savecouchy" data-widget-id="453277467235459072">Tweets about "couchylives OR savecouchy"</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
     </div>
   </body>
 </html>
