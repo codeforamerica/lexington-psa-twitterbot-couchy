@@ -51,7 +51,9 @@ function handleNewUser(tweet) {
 
 function setNewUser(tweet) {
   redis.set(tweet.user.screen_name, JSON.stringify(tweet));
-  // replyTo(tweet);
+  if (process.env.NODE_ENV === 'production') {
+    replyTo(tweet);
+  }
 }
 
 function replyTo(tweet) {
