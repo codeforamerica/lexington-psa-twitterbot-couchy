@@ -70,13 +70,23 @@ app.get('/', function(req, res) {
 });
 
 app.get('/tweet', function(req, res) {
-  res.send(latestTweet);
+  redis.RANDOMKEY(function() {
+    var randomKey = arguments[1];
+    getStoredTweet(randomKey, function(tweet) {
+      res.send(tweet);
+    });
+  });
 });
 
+function getStoredTweet(twitterHandle, callback) {
+  redis.get(twitterHandle, function(err, tweet) {
+    callback(tweet ? JSON.parse(tweet) : undefined);
+  });
+}
+
 app.get('/buds/:name', function(req, res) {
-  redis.get(req.params.name, function(err, tweet) {
+  getStoredTweet(req.params.name, function(tweet) {
     if (tweet) {
-      tweet = JSON.parse(tweet)
       res.render('bud', { tweet: tweet, requestUrl: 'http://savecouchy.com/' + req.url })
     } else {
       res.redirect('/');
