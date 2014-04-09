@@ -14,7 +14,7 @@ var T = new Twit({
   , access_token_secret:  process.env.ACCESS_TOKEN_SECRET
 });
 
-var latestTweet = JSON.parse("{\"created_at\":\"Sat Apr 05 23:57:55 +0000 2014\",\"id\":452596022548520960,\"id_str\":\"452596022548520960\",\"text\":\"Are you a #BBN bodyguard? You should holler at @SaveCouchy to save it from the flames! cc/@rhsiv @JTPalumbo78 #finalfour\",\"source\":\"<a href=\\\"http://www.echofon.com/\\\" rel=\\\"nofollow\\\">Echofon</a>\",\"truncated\":false,\"in_reply_to_status_id\":null,\"in_reply_to_status_id_str\":null,\"in_reply_to_user_id\":2429064914,\"in_reply_to_user_id_str\":\"2429064914\",\"in_reply_to_screen_name\":\"SaveCouchy\",\"user\":{\"id\":120774911,\"id_str\":\"120774911\",\"name\":\"Smith Schwartz\",\"screen_name\":\"smithschwartz\",\"location\":\"San Francisco\",\"url\":\"http://smithschwartz.com\",\"description\":\"Cascades with style. Blogs at @Schwartzography. High five anxiety.\",\"protected\":false,\"followers_count\":422,\"friends_count\":437,\"listed_count\":15,\"created_at\":\"Sun Mar 07 14:18:00 +0000 2010\",\"favourites_count\":220,\"utc_offset\":-18000,\"time_zone\":\"Central Time (US & Canada)\",\"geo_enabled\":true,\"verified\":false,\"statuses_count\":1070,\"lang\":\"en\",\"contributors_enabled\":false,\"is_translator\":false,\"is_translation_enabled\":false,\"profile_background_color\":\"1A1B1F\",\"profile_background_image_url\":\"http://pbs.twimg.com/profile_background_images/669934286/51eeb4a4b9e7414711b3c6f386d52d54.jpeg\",\"profile_background_image_url_https\":\"https://pbs.twimg.com/profile_background_images/669934286/51eeb4a4b9e7414711b3c6f386d52d54.jpeg\",\"profile_background_tile\":false,\"profile_image_url\":\"http://pbs.twimg.com/profile_images/2147173740/IMG_5521_normal.jpg\",\"profile_image_url_https\":\"https://pbs.twimg.com/profile_images/2147173740/IMG_5521_normal.jpg\",\"profile_banner_url\":\"https://pbs.twimg.com/profile_banners/120774911/1348674620\",\"profile_link_color\":\"2FC2EF\",\"profile_sidebar_border_color\":\"FFFFFF\",\"profile_sidebar_fill_color\":\"252429\",\"profile_text_color\":\"666666\",\"profile_use_background_image\":true,\"default_profile\":false,\"default_profile_image\":false,\"following\":null,\"follow_request_sent\":null,\"notifications\":null},\"geo\":null,\"coordinates\":null,\"place\":null,\"contributors\":null,\"retweet_count\":0,\"favorite_count\":0,\"entities\":{\"hashtags\":[],\"symbols\":[],\"urls\":[],\"user_mentions\":[{\"screen_name\":\"SaveCouchy\",\"name\":\"Couchy\",\"id\":2429064914,\"id_str\":\"2429064914\",\"indices\":[0,11]}]},\"favorited\":false,\"retweeted\":false,\"filter_level\":\"medium\",\"lang\":\"it\",\"embedded\":{\"html\":\"@SaveCouchy oh hai!\"}}");
+var latestTweet;
 
 var stream = T.stream('statuses/filter', {track: 'couchylives'})
 
@@ -50,10 +50,9 @@ function handleNewUser(tweet) {
 
 function setNewUser(tweet) {
   redis.set(tweet.user.screen_name, JSON.stringify(tweet));
-  replyTo(tweet);
-  // if (process.env.NODE_ENV === 'production') {
-  //   replyTo(tweet);
-  // }
+  if (process.env.NODE_ENV === 'production') {
+    replyTo(tweet);
+  }
 }
 
 function replyTo(tweet) {
@@ -65,24 +64,36 @@ function replyTo(tweet) {
   });
 }
 
-app.get('/', function(req, res) {
-  res.render('index', { latestTweet: latestTweet })
-});
-
-app.get('/tweet', function(req, res) {
+function randomTweet(callback) {
   redis.RANDOMKEY(function() {
     var randomKey = arguments[1];
     getStoredTweet(randomKey, function(tweet) {
-      res.send(tweet);
+      callback(tweet);
     });
   });
-});
+};
 
 function getStoredTweet(twitterHandle, callback) {
   redis.get(twitterHandle, function(err, tweet) {
     callback(tweet ? JSON.parse(tweet) : undefined);
   });
 }
+
+app.get('/', function(req, res) {
+  if (latestTweet) {
+      res.render('index', { latestTweet: latestTweet });
+  } else {
+    randomTweet(function(tweet) {
+      res.render('index', { latestTweet: tweet });
+    });
+  }
+});
+
+app.get('/tweet', function(req, res) {
+  randomTweet(function(tweet) {
+    res.send(tweet);
+  });
+});
 
 app.get('/buds/:name', function(req, res) {
   getStoredTweet(req.params.name, function(tweet) {
