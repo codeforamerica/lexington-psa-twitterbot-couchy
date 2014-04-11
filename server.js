@@ -24,6 +24,12 @@ var stream = T.stream('statuses/filter', {track: process.env.SEARCH_TERM}, funct
   console.log(arguments);
 });
 stream.on('tweet', handleTweet);
+stream.on('error', function(err) {
+  if (err.code === 401) {
+    console.log('Error authenticating with twitter! Please check env variables');
+    process.exit();
+  }
+});
 
 function handleTweet(tweet) {
   latestTweet = tweet;
