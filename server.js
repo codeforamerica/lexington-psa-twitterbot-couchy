@@ -20,7 +20,7 @@ bot.newTwit({
 });
 
 bot.redis = redis;
-bot.streamTerm(process.env.SEARCH_TERM, handleTweet);
+bot.streamTerm(process.env.SEARCH_TERM);
 
 app.get('/', function(req, res) {
   if (bot.latestTweet) {
