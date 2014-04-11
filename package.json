@@ -4,7 +4,7 @@
   "description": "Don't burn couchy!",
   "main": "server.js",
   "dependencies": {
-    "twit": "~1.1.12",
+    "twit": "jden/twit",
     "express": "~3.5.1",
     "ejs": "~1.0.0",
     "redis-url": "~0.2.0",
