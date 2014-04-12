@@ -4,6 +4,9 @@ var _this;
 module.exports = {
   newTwit: function(twitParams) {
     _this = this;
+    _this.setTwit();
+  },
+  setTwit: function(twitParams) {
     _this.T = new Twit(twitParams);
   },
   streamTerm: function(term, handleTweet) {
@@ -45,19 +48,17 @@ module.exports = {
     }
   },
   handleNewUser: function(tweet) {
-    console.log('new user! ' + tweet.user.screen_name);
-    tweet.embedded = {html: tweet.text};
     _this.setNewUser(tweet);
   },
   handleNewThread: function(tweet) {
-    console.log('omg a new thread!!');
-    _this.redis.get(tweet.user.screen_name, function(err, user) {
+    _this.getTweet(tweet.user.screen_name, function(err, user) {
       if (!user) {
         _this.handleNewUser(tweet)
-      } else {
-        console.log('NOT a new new user ' + tweet.user.screen_name);
       }
     });
+  },
+  getTweet: function(screen_name, callback) {
+    _this.redis.get(screen_name, callback);
   },
   handleTweet: function(tweet) {
     _this.latestTweet = tweet;
