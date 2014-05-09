@@ -4,7 +4,7 @@ var _this;
 module.exports = {
   newTwit: function(twitParams) {
     _this = this;
-    _this.setTwit();
+    _this.setTwit(twitParams);
   },
   setTwit: function(twitParams) {
     _this.T = new Twit(twitParams);
